@@ -38,7 +38,7 @@ git clone [https://github.com/Daemonlite/Python-selenium-twitter-galamsey-data.g
 cd Python-selenium-twitter-galamsey-data
 ```
 #### 2. Create a .env File with credentials to x
-## Fill in X_USERNAME AND X_PASSWORD IN ENV VARS
 ```bash
 touch .env
 ```
+#### Fill in X_USERNAME and X_PASSWORD in env variable
