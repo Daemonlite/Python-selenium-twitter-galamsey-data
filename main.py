@@ -59,7 +59,7 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
     driver = None
     try:
         print("Setting up undetected-chromedriver for Brave...")
-        driver = uc.Chrome(options=options, browser_executable_path=brave_path)
+        driver = uc.Chrome(version_main=141, options=options, browser_executable_path=brave_path)
         print("Driver initialized successfully")
 
         # Login to Twitter
