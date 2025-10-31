@@ -1,4 +1,3 @@
-from shlex import quote
 import time
 import os
 import csv
@@ -119,7 +118,7 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
         # Search for tweets
         print("Searching for galamsey tweets...")
         query = input("Enter the search query: ")
-        search_url = f"https://x.com/search?q={quote(query)}&f=tweets&vertical=default&src=typed_query&f=live_query&src=typed_query"
+        search_url = f"https://x.com/search?q={query}&src=typed_query"
         driver.get(search_url)
         time.sleep(7)
 
