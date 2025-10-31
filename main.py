@@ -1,3 +1,4 @@
+from shlex import quote
 import time
 import os
 import csv
@@ -9,7 +10,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 
 import undetected_chromedriver as uc
-from decouple import config
+# from decouple import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, batch_size=100, batch_wait_time=15):
     """
@@ -75,7 +79,7 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
                 username_input = WebDriverWait(driver, 30).until(
                     EC.presence_of_element_located((By.XPATH, "//input[@name='text']"))
                 )
-                username_input.send_keys(config("X_USERNAME"))
+                username_input.send_keys(os.getenv("X_USERNAME"))
                 username_input.send_keys(Keys.RETURN)
                 time.sleep(5)
                 break # Exit loop if successful
@@ -94,7 +98,7 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
                     password_input = WebDriverWait(driver, 20).until(
                         EC.presence_of_element_located((By.XPATH, "//input[@name='password']"))
                     )
-                    password_input.send_keys(config("X_PASSWORD"))
+                    password_input.send_keys(os.getenv("X_PASSWORD"))
                     password_input.send_keys(Keys.RETURN)
                     time.sleep(7)
                     break # Exit loop if successful
@@ -114,7 +118,8 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
 
         # Search for tweets
         print("Searching for galamsey tweets...")
-        search_url = "https://x.com/search?q=galamsey&src=typed_query"
+        query = input("Enter the search query: ")
+        search_url = f"https://x.com/search?q={quote(query)}&f=tweets&vertical=default&src=typed_query&f=live_query&src=typed_query"
         driver.get(search_url)
         time.sleep(7)
 
