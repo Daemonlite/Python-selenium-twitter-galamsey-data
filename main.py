@@ -8,8 +8,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import undetected_chromedriver as uc
-from decouple import config
+
 
 def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, batch_size=100, batch_wait_time=15):
     """
@@ -75,7 +78,7 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
                 username_input = WebDriverWait(driver, 30).until(
                     EC.presence_of_element_located((By.XPATH, "//input[@name='text']"))
                 )
-                username_input.send_keys(config("X_USERNAME"))
+                username_input.send_keys(os.getenv("X_USERNAME"))
                 username_input.send_keys(Keys.RETURN)
                 time.sleep(5)
                 break # Exit loop if successful
@@ -94,7 +97,7 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
                     password_input = WebDriverWait(driver, 20).until(
                         EC.presence_of_element_located((By.XPATH, "//input[@name='password']"))
                     )
-                    password_input.send_keys(config("X_PASSWORD"))
+                    password_input.send_keys(os.getenv("X_PASSWORD"))
                     password_input.send_keys(Keys.RETURN)
                     time.sleep(7)
                     break # Exit loop if successful
@@ -113,8 +116,17 @@ def scrape_galamsey_tweets(output_file="galamsey_tweets.csv", min_tweets=1000, b
             time.sleep(5)
 
         # Search for tweets
-        print("Searching for galamsey tweets...")
-        search_url = "https://x.com/search?q=galamsey&src=typed_query"
+        print("Searching for tweets...")
+
+        # Take input for the search query
+        query = input("Enter your search query: ")
+
+        # Format the query for URL (replace spaces with %20)
+        formatted_query = query.replace(" ", "%20")
+
+        # Construct the search URL
+        search_url = f"https://x.com/search?q={formatted_query}&src=typed_query"
+
         driver.get(search_url)
         time.sleep(7)
 
